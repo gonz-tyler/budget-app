@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    container_name: budget-app-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=budgetdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    container_name: budget-app-backend
+    build: . # Build the image from the Dockerfile in the current directory
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/budgetdb
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
