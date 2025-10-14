@@ -1,10 +1,30 @@
 import { useState, useEffect } from "react";
-import { TextInput, NumberInput, Button, Box, Stack } from "@mantine/core";
+import {
+  TextInput,
+  NumberInput,
+  Button,
+  Box,
+  Title,
+  Select,
+  Stack,
+} from "@mantine/core";
+
+const expenseCategories = [
+  "Food",
+  "Transport",
+  "Utilities",
+  "Housing",
+  "Entertainment",
+  "Health",
+  "Shopping",
+  "Other",
+];
 
 function TransactionForm({
   onTransactionAction,
   editingTransaction,
   setEditingTransaction,
+  expenseCategories,
 }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -59,6 +79,15 @@ function TransactionForm({
         onChange={(event) => setDescription(event.currentTarget.value)}
         required
       />
+      <Select
+        label="Category"
+        placeholder="Pick a category"
+        data={expenseCategories}
+        value={category}
+        onChange={setCategory} // The Select component's onChange provides the value directly
+        required
+        mt="md"
+      />
       <NumberInput
         label="Amount"
         value={amount}
@@ -71,13 +100,6 @@ function TransactionForm({
         label="Date"
         value={date}
         onChange={(event) => setDate(event.currentTarget.value)}
-        required
-        mt="md"
-      />
-      <TextInput
-        label="Category"
-        value={category}
-        onChange={(event) => setCategory(event.currentTarget.value)}
         required
         mt="md"
       />
