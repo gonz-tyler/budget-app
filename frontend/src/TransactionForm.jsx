@@ -4,21 +4,9 @@ import {
   NumberInput,
   Button,
   Box,
-  Title,
-  Select,
   Stack,
+  Select,
 } from "@mantine/core";
-
-const expenseCategories = [
-  "Food",
-  "Transport",
-  "Utilities",
-  "Housing",
-  "Entertainment",
-  "Health",
-  "Shopping",
-  "Other",
-];
 
 function TransactionForm({
   onTransactionAction,
@@ -60,9 +48,13 @@ function TransactionForm({
     const method = isEditing ? "PUT" : "POST";
 
     try {
+      const token = localStorage.getItem("token");
       await fetch(url, {
         method: method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(formData),
       });
       onTransactionAction();
@@ -79,27 +71,28 @@ function TransactionForm({
         onChange={(event) => setDescription(event.currentTarget.value)}
         required
       />
-      <Select
-        label="Category"
-        placeholder="Pick a category"
-        data={expenseCategories}
-        value={category}
-        onChange={setCategory} // The Select component's onChange provides the value directly
-        required
-        mt="md"
-      />
       <NumberInput
         label="Amount"
         value={amount}
         onChange={setAmount}
         required
         mt="md"
+        prefix="£"
       />
       <TextInput
         type="date"
         label="Date"
         value={date}
         onChange={(event) => setDate(event.currentTarget.value)}
+        required
+        mt="md"
+      />
+      <Select
+        label="Category"
+        placeholder="Select a category"
+        data={expenseCategories}
+        value={category}
+        onChange={setCategory}
         required
         mt="md"
       />
